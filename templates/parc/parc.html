@@ -1,0 +1,49 @@
+{% extends 'base.html' %} {% block title %}Liste des Véhicules dans le Parc{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-4">Liste des Véhicules</h1>
+  <table class="table table-bordered table-hover">
+    <thead class="table-primary">
+      <tr>
+        <th>#</th>
+        <th>Modèle</th>
+        <th>Immatriculation</th>
+        <th>Disponibilité</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for vehicle in vehicles %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ vehicle.model }}</td>
+        <td>{{ vehicle.license_plate }}</td>
+        <td>
+          {% if vehicle.availability == 'disponible' %}
+          <span class="badge bg-success">disponible</span>
+          {% elif vehicle.availability == 'réservé' %}
+          <span class="badge bg-warning text-dark">Réservé</span>
+          {% else %}
+          <span class="badge bg-danger">Indisponible</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'parc_info' vehicle.pk %}" class="btn btn-sm btn-info"
+            >Info</a
+          >
+          <a
+            href="{% url 'parc_update' vehicle.pk %}"
+            class="btn btn-sm btn-warning"
+            >Mettre à jour</a
+          >
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5" class="text-center">Aucun véhicule dans le parc</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %} {% block title %}Liste des Véhicules du Parc{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-4">Liste des Véhicules</h1>
+  <table class="table table-bordered table-hover">
+    <thead class="table-primary">
+      <tr>
+        <th>Info</th>
+        <th>Modèle</th>
+        <th>Immatriculation</th>
+        <th>Disponibilité</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for vehicle in vehicles %}
+      <tr>
+        <td>
+          <a href="{% url 'vehicle_info' vehicle.id %}" class="btn btn-primary btn-sm">
+            Détails
+          </a>
+        </td>
+        <td>{{ vehicle.model }}</td>
+        <td>{{ vehicle.license_plate }}</td>
+        <td>
+          {% if vehicle.availability == 'disponible' %}
+          <span class="badge bg-success">disponible</span>
+          {% elif vehicle.availability == 'réservé' %}
+          <span class="badge bg-warning">Réservé</span>
+          {% elif vehicle.availability == 'indisponible' %}
+          <span class="badge bg-danger">Indisponible</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if vehicle.availability != 'disponible' %}
+          <a href="{% url 'parc_info' vehicle.id %}" class="btn btn-sm btn-info"
+            >Info</a
+          >
+          <a
+            href="{% url 'parc_update' vehicle.id %}"
+            class="btn btn-sm btn-warning"
+            >Mettre à jour</a
+          >
+          <a href="{% url 'generate_contract' vehicle.id %}" class="btn btn-success" target="_blank">Imprimer le Contrat</a>
+          {% else %}
+          <span>Aucune action</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5" class="text-center">Aucun véhicule disponible.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

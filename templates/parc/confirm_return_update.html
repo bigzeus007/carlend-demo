@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Mise à Jour Retour{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Mise à Jour du Véhicule</h2>
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Champ Kilométrage -->
+        <div class="mb-3">
+            <label class="form-label">Kilométrage Actuel</label>
+            <input type="number" class="form-control" name="mileage" id="mileageInput" value="{{ vehicle.mileage }}" required min="{{ vehicle.mileage }}">
+        </div>
+
+        <!-- Jauge de carburant -->
+        <div class="mb-3 text-center">
+            <h4>Niveau de Carburant</h4>
+            <canvas id="fuelGauge"></canvas>
+            <input type="range" min="0" max="100" step="1" id="fuelLevel" class="form-range mt-3" name="fuel_level" 
+                   value="{{ vehicle.fuel_level|default:50 }}">
+            <p><strong>Valeur: <span id="fuelValue">{{ vehicle.fuel_level|default:50 }}</span>%</strong></p>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Valider</button>
+        <a href="{% url 'parc_list' %}" class="btn btn-secondary">Annuler</a>
+    </form>
+</div>
+
+<!-- Importer Gauge.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gauge.js/1.3.7/gauge.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Sélection des éléments HTML
+        var fuelGaugeCanvas = document.getElementById("fuelGauge");
+        var fuelLevelInput = document.getElementById("fuelLevel");
+        var fuelValueDisplay = document.getElementById("fuelValue");
+        var mileageInput = document.getElementById("mileageInput");
+
+        if (!fuelGaugeCanvas || !fuelLevelInput || !fuelValueDisplay || !mileageInput) {
+            console.error("Un des éléments du formulaire est introuvable.");
+            return;
+        }
+
+        // Vérification et conversion des valeurs initiales
+        let initialFuelValue = parseInt(fuelLevelInput.value) || 50;
+        let initialMileage = parseInt(mileageInput.value) || 0;
+
+        // Configuration de la jauge
+        var opts = {
+            angle: 0,
+            lineWidth: 0.2,
+            radiusScale: 1,
+            pointer: {
+                length: 0.6,
+                strokeWidth: 0.035,
+                color: "#000000",
+            },
+            limitMax: false,
+            limitMin: false,
+            colorStart: "#00b300",
+            colorStop: "#ff0000",
+            strokeColor: "#E0E0E0",
+            generateGradient: true,
+        };
+
+        // Initialisation de la jauge
+        var gauge = new Gauge(fuelGaugeCanvas).setOptions(opts);
+        gauge.maxValue = 100;
+        gauge.setMinValue(0);
+        gauge.animationSpeed = 10;
+        gauge.set(initialFuelValue);
+        fuelValueDisplay.textContent = initialFuelValue;
+
+        // Mise à jour de la jauge avec le slider
+        fuelLevelInput.addEventListener("input", function () {
+            let value = parseInt(this.value);
+            fuelValueDisplay.textContent = value;
+            gauge.set(value);
+        });
+
+        // Empêcher la soumission si le kilométrage est inférieur à l'ancien kilométrage
+        document.querySelector("form").addEventListener("submit", function (event) {
+            let enteredMileage = parseInt(mileageInput.value);
+            if (enteredMileage < initialMileage) {
+                alert("Le kilométrage ne peut pas être inférieur à l'ancien kilométrage.");
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+
+{% endblock %}

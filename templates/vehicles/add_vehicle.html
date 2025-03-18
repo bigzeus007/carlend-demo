@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ajout Véhicule</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gauge.js/1.3.7/gauge.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <style>
+      .gauge-container {
+        width: 100%;
+        max-width: 400px;
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h2 class="text-center">Ajouter un Véhicule</h2>
+      <div class="row">
+        <!-- Colonne Informations Véhicule -->
+        <div class="col-md-6">
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label">Marque</label>
+              <input type="text" class="form-control" name="brand" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Modèle</label>
+              <input type="text" class="form-control" name="model" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Immatriculation</label>
+              <input
+                type="text"
+                class="form-control"
+                name="license_plate"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Numéro de Châssis</label>
+              <input type="text" class="form-control" name="vin" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Disponibilité</label>
+              <select class="form-control" name="availability" required>
+                <option value="disponible">Disponible</option>
+                <option value="réservé">Réservé</option>
+                <option value="indisponible">Indisponible</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Kilométrage</label>
+              <input
+                type="number"
+                class="form-control"
+                name="mileage"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Dernier service km</label>
+              <input
+                type="number"
+                class="form-control"
+                name="last_service_km"
+                required
+              />
+            </div>
+            <input
+              type="hidden"
+              name="fuel_level"
+              id="hidden_fuel_level"
+              value="50"
+            />
+            <button type="submit" class="btn btn-primary">Ajouter</button>
+            <a href="{% url 'parc_list' %}" class="btn btn-secondary">Retour</a>
+          </form>
+        </div>
+
+        <!-- Colonne Jauge de Carburant -->
+        <div class="col-md-6 text-center">
+          <h4>Niveau de Carburant</h4>
+          <canvas id="fuelGauge"></canvas>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            id="fuelLevel"
+            class="form-range mt-3"
+            name="fuel_level"
+          />
+          <p>
+            <strong>Valeur: <span id="fuelValue">50</span>%</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var opts = {
+          angle: 0,
+          lineWidth: 0.2,
+          radiusScale: 1,
+          pointer: {
+            length: 0.6,
+            strokeWidth: 0.035,
+            color: "#000000",
+          },
+          limitMax: false,
+          limitMin: false,
+          colorStart: "#00b300",
+          colorStop: "#ff0000",
+          strokeColor: "#E0E0E0",
+          generateGradient: true,
+        };
+
+        var target = document.getElementById("fuelGauge");
+        var gauge = new Gauge(target).setOptions(opts);
+        gauge.maxValue = 100;
+        gauge.setMinValue(0);
+        gauge.animationSpeed = 10;
+
+        // Initialiser avec la valeur par défaut du slider
+        let initialFuelValue = document.getElementById("fuelLevel").value;
+        gauge.set(initialFuelValue);
+        document.getElementById("fuelValue").textContent = initialFuelValue;
+        document.getElementById("hidden_fuel_level").value = initialFuelValue;
+
+        // Mise à jour de la jauge avec le slider
+        document
+          .getElementById("fuelLevel")
+          .addEventListener("input", function () {
+            let value = parseInt(this.value);
+            document.getElementById("fuelValue").textContent = value;
+            gauge.set(value);
+            document.getElementById("hidden_fuel_level").value = value; // Met à jour l'input caché
+          });
+      });
+    </script>
+  </body>
+</html>

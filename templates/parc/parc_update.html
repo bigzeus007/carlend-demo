@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}Mettre à Jour le Véhicule{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h2>Mettre à Jour le Véhicule</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row mb-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4>Informations de Réservation</h4>
+                        <a href="javascript:history.back()" class="btn btn-secondary">Retour</a>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label for="creation_date" class="form-label">Date de Création de la Réservation :</label>
+                        <input type="text" id="creation_date" class="form-control" 
+                               value="{{ reservation.created_at|date:'d M, Y' }}" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="client_name" class="form-label">Nom Client :</label>
+                        <input type="text" id="client_name" name="client_name" class="form-control" 
+                               value="{{ reservation.client_name }}">
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="advisor_name" class="form-label">Nom Conseiller de Service :</label>
+                        <input type="text" id="advisor_name" class="form-control" 
+                               value="{{ reservation.service_advisor }}" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="assigned_vehicle" class="form-label">Immatriculation du Véhicule Affecté :</label>
+                        <select id="assigned_vehicle" name="assigned_vehicle" class="form-select">
+                            <option value="{{ vehicle.pk }}">{{ vehicle.license_plate }}</option>
+                            {% for v in available_vehicles %}
+                            <option value="{{ v.pk }}">{{ v.license_plate }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="criticality" class="form-label">Degré de Criticité :</label>
+                        <select id="criticality" name="criticality" class="form-select">
+                            <option value="Faible" {% if reservation.criticality == "Faible" %}selected{% endif %}>Faible</option>
+                            <option value="Moyen" {% if reservation.criticality == "Moyen" %}selected{% endif %}>Moyen</option>
+                            <option value="Critique" {% if reservation.criticality == "Critique" %}selected{% endif %}>Critique</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="return_date" class="form-label">Date de Retour Prévue :</label>
+                        <input type="date" id="return_date" name="return_date" class="form-control"
+                               value="{{ calculated_return_date }}">
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <label for="reasons" class="form-label">Raisons :</label>
+                        <textarea id="reasons" name="reasons" class="form-control" rows="3">{{ reservation.reasons }}</textarea>
+                    </div>
+                </div>
+
+                <!-- Ajout des champs de fichiers -->
+                <div class="row mb-4">
+                    <h4>Documents d'Identité</h4>
+                    <div class="col-md-6">
+                        <label for="driving_license_front" class="form-label">Permis de conduire (recto) :</label>
+                        {% if reservation.driving_license_front %}
+                        <a href="{{ reservation.driving_license_front.url }}" target="_blank">Voir le document existant</a><br>
+                        {% endif %}
+                        <input type="file" id="driving_license_front" name="driving_license_front" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="driving_license_back" class="form-label">Permis de conduire (verso) :</label>
+                        {% if reservation.driving_license_back %}
+                        <a href="{{ reservation.driving_license_back.url }}" target="_blank">Voir le document existant</a><br>
+                        {% endif %}
+                        <input type="file" id="driving_license_back" name="driving_license_back" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="id_card_front" class="form-label">Carte d'identité (recto) :</label>
+                        {% if reservation.id_card_front %}
+                        <a href="{{ reservation.id_card_front.url }}" target="_blank">Voir le document existant</a><br>
+                        {% endif %}
+                        <input type="file" id="id_card_front" name="id_card_front" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="id_card_back" class="form-label">Carte d'identité (verso) :</label>
+                        {% if reservation.id_card_back %}
+                        <a href="{{ reservation.id_card_back.url }}" target="_blank">Voir le document existant</a><br>
+                        {% endif %}
+                        <input type="file" id="id_card_back" name="id_card_back" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="delivery_date" class="form-label">Date de Livraison Convenue :</label>
+                        <input type="date" id="delivery_date" name="delivery_date" class="form-control" 
+                               value="{{ reservation.reservation_date|date:'Y-m-d' }}">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <button type="submit" name="action" value="update" class="btn btn-primary w-100">Mettre à Jour</button>
+                    </div>
+                    {% if vehicle.availability == "réservé" %}
+                    <div class="col-md-4">
+                        <button type="submit" name="action" value="confirm_delivery" class="btn btn-success w-100">Livraison</button>
+                    </div>
+                    {% endif %}
+                    {% if vehicle.availability == "indisponible" %}
+                    <div class="col-md-4">
+                        <a href="{% url 'confirm_return_update' vehicle.id %}" class="btn btn-info w-100">Confirmer Retour</a>
+                    </div>
+                    {% endif %}
+                    {% if vehicle.availability != "indisponible" %}
+                    <div class="col-md-4">
+                        <button type="submit" name="action" value="cancel_reservation" class="btn btn-danger w-100">Annuler Réservation</button>
+                    </div>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

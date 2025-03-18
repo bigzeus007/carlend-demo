@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}Détails de la Réservation{% endblock %}
+
+{% block content %}
+<div class="container mt-4">    
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Détails de la Réservation</h2>
+        <a href="javascript:history.back()" class="btn btn-secondary">⬅️ Retour à la liste</a>
+    </div>
+    <table class="table table-bordered">
+        <tr>
+            <th>Date de Création :</th>
+            <td>{{ reservation.created_at }}</td>
+        </tr>
+        <tr>
+            <th>Demandeur :</th>
+            <td>{{ reservation.user.username }}</td>
+        </tr>
+        <tr>
+            <th>Nom Client :</th>
+            <td>{{ reservation.client_name }}</td>
+        </tr>
+        <tr>
+            <th>Plaque :</th>
+            <td>{{ reservation.client_license_plate|default:"Non spécifiée" }}</td>
+        </tr>
+        <tr>
+            <th>Mise en circulation :</th>
+            <td>{{ reservation.client_vehicle_date|default:"Non spécifiée" }}</td>
+        </tr>
+        <tr>
+            <th>Criticité :</th>
+            <td>{{ reservation.get_criticality_display }}</td>
+        </tr>
+        <tr>
+            <th>Date de Réservation :</th>
+            <td>{{ reservation.reservation_date }}</td>
+        </tr>
+        <tr>
+            <th>Durée :</th>
+            <td>{{ reservation.reservation_duration|default:"Non spécifiée" }} jours</td>
+        </tr>
+        <tr>
+            <th>Nom Commercial :</th>
+            <td>{{ reservation.commercial_advisor|default:"Non spécifié" }}</td>
+        </tr>
+        <tr>
+            <th>Nom Conseiller de service :</th>
+            <td>{{ reservation.service_advisor|default:"Non spécifié" }}</td>
+        </tr>
+        <tr>
+            <th>Raisons :</th>
+            <td>{{ reservation.reasons|default:"Non spécifiées" }}</td>
+        </tr>
+        <tr>
+            <th>Véhicule Assigné :</th>
+            <td>
+                {% if reservation.assigned_vehicle %}
+                    {{ reservation.assigned_vehicle.model }} ({{ reservation.assigned_vehicle.license_plate }})
+                {% else %}
+                    Aucun véhicule assigné
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Permis de Conduire :</th>
+            <td>
+                {% if reservation.driving_license_front %}
+                    <a href="{{ reservation.driving_license_front.url }}" target="_blank">Permis Recto</a><br>
+                {% endif %}
+                {% if reservation.driving_license_back %}
+                    <a href="{{ reservation.driving_license_back.url }}" target="_blank">Permis Verso</a><br>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Carte d'Identité :</th>
+            <td>
+                {% if reservation.id_card_front %}
+                    <a href="{{ reservation.id_card_front.url }}" target="_blank">Carte ID Recto</a><br>
+                {% endif %}
+                {% if reservation.id_card_back %}
+                    <a href="{{ reservation.id_card_back.url }}" target="_blank">Carte ID Verso</a>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html' %} {% block title %}Historique des Réservations{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <h1>Historique des Réservations</h1>
+  <table class="table table-bordered table-hover">
+    <thead class="table-primary">
+      <tr>
+        <th>Date de Réservation</th>
+        <th>Créateur</th>
+        <th>Nom Client</th>
+        <th>Date de Prêt</th>
+        <th>Date de Retour</th>
+        <th>Durée</th>
+        <th>Immatriculation</th>
+        <th>Conseiller Service</th>
+        <th>Conseiller Commercial</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for reservation in reservations %}
+      <tr>
+        <td>{{ reservation.reservation_date }}</td>
+        <td>{{ reservation.user.email }}</td>
+        <td>{{ reservation.client_name }}</td>
+        <td>{{ reservation.start_date|default:"Non défini" }}</td>
+        <td>{{ reservation.end_date|default:"Non défini" }}</td>
+        <td>{{ reservation.reservation_duration }} jours</td>
+        <td>{{ reservation.vehicle.license_plate|default:"Non défini" }}</td>
+        <td>{{ reservation.service_advisor }}</td>
+        <td>{{ reservation.commercial_advisor }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="9" class="text-center">Aucune réservation disponible</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

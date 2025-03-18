@@ -1,0 +1,20 @@
+{% extends 'base.html' %} {% block title %}Assigner un Véhicule{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <h1>Assigner un Véhicule</h1>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="vehicle" class="form-label">Véhicules disponibles</label>
+      <select name="vehicle_id" id="vehicle" class="form-control">
+        {% for vehicle in vehicles %}
+        <option value="{{ vehicle.pk }}">
+          {{ vehicle.brand }} {{ vehicle.model }} ({{ vehicle.license_plate }})
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-success">Assigner</button>
+  </form>
+</div>
+{% endblock %}

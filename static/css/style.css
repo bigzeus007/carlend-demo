@@ -1,0 +1,7 @@
+.form-control {
+    font-size: 22px !important;  /* Forcer la taille du texte */
+    height: 30px !important;  /* Augmenter la hauteur */
+    padding: 12px 20px !important;  /* Plus d'espace à l'intérieur */
+    border-radius: 8px !important;  /* Arrondi */
+    line-height: 1.5 !important;
+}

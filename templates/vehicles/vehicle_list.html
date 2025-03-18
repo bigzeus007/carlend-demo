@@ -1,0 +1,57 @@
+{% extends 'base.html' %} {% block title %}Liste des Véhicules{% endblock %} 
+{% block content %}
+<div class="container mt-4">
+  <a href="{% url 'add_vehicle' %}" class="btn btn-primary mb-3"
+    >Ajouter un Véhicule</a
+  >
+  <h1 class="mb-4">Liste des Véhicules</h1>
+  <table class="table table-bordered table-hover">
+    <thead class="table-primary">
+      <tr>
+        <th>#</th>
+        <th>Marque</th>
+        <th>Modèle</th>
+        <th>Immatriculation</th>
+        <th>Kilométrage</th>
+        <th>Disponibilité</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for vehicle in vehicles %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ vehicle.brand }}</td>
+        <td>{{ vehicle.model }}</td>
+        <td>{{ vehicle.license_plate }}</td>
+        <td>{{ vehicle.mileage }} km</td>
+        <td>
+          {% if vehicle.availability == 'disponible' %}
+          <span class="badge bg-success">disponible</span>
+          {% elif vehicle.availability == 'réservé' %}
+          <span class="badge bg-warning text-dark">Réservé</span>
+          {% elif vehicle.availability == 'indisponible' %}
+          <span class="badge bg-danger">Indisponible</span>
+          {% endif %}
+        </td>
+        <td>
+          <a
+            href="{% url 'edit_vehicle' vehicle.pk %}"
+            class="btn btn-sm btn-warning"
+            >Modifier</a>
+          <a href="{% url 'delete_vehicle' vehicle.pk %}" class="btn btn-sm btn-danger"
+            onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce véhicule ?');">
+            Supprimer
+          </a>  
+          
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="7" class="text-center">Aucun véhicule disponible</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

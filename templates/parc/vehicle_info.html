@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Détails du Véhicule{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Détails du Véhicule</h1>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ vehicle.brand }} {{ vehicle.model }}</h5>
+            <p><strong>Immatriculation :</strong> {{ vehicle.license_plate }}</p>
+            <p><strong>Numéro de Châssis :</strong> {{ vehicle.vin }}</p>
+            <p><strong>Kilométrage :</strong> {{ vehicle.mileage }} km</p>
+            <p><strong>Dernier service :</strong> {{ vehicle.last_service_km }} km</p>
+            
+            <!-- Jauge de Carburant -->
+            <div class="text-center">
+                <h4>Niveau de Carburant</h4>
+                <canvas id="fuelGauge"></canvas>
+                <p><strong>Valeur: <span id="fuelValue">{{ vehicle.fuel_level }}</span>%</strong></p>
+            </div>
+
+            <p><strong>Disponibilité :</strong> 
+                {% if vehicle.availability == "disponible" %}
+                    <span class="badge bg-success">Disponible</span>
+                {% elif vehicle.availability == "réservé" %}
+                    <span class="badge bg-warning text-dark">Réservé</span>
+                {% else %}
+                    <span class="badge bg-danger">Indisponible</span>
+                {% endif %}
+            </p>
+            <a href="{% url 'parc_list' %}" class="btn btn-secondary">Retour</a>
+        </div>
+    </div>
+</div>
+
+<!-- Script pour la jauge -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gauge.js/1.3.7/gauge.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var opts = {
+            angle: 0,
+            lineWidth: 0.2,
+            radiusScale: 1,
+            pointer: {
+                length: 0.6,
+                strokeWidth: 0.035,
+                color: "#000000",
+            },
+            limitMax: false,
+            limitMin: false,
+            colorStart: "#00b300",
+            colorStop: "#ff0000",
+            strokeColor: "#E0E0E0",
+            generateGradient: true,
+        };
+
+        var target = document.getElementById("fuelGauge");
+        var gauge = new Gauge(target).setOptions(opts);
+        gauge.maxValue = 100;
+        gauge.setMinValue(0);
+        gauge.animationSpeed = 10;
+        gauge.set({{ vehicle.fuel_level }});
+
+        document.getElementById("fuelValue").textContent = {{ vehicle.fuel_level }};
+    });
+</script>
+{% endblock %}

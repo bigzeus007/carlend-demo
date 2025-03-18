@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Mettre à jour le Véhicule{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Mettre à Jour le Véhicule</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="client_name" class="form-label">Nom du Client</label>
+            <input type="text" class="form-control" id="client_name" name="client_name" value="{{ reservation.client_name }}">
+        </div>
+        <div class="mb-3">
+            <label for="status" class="form-label">Statut</label>
+            <select class="form-select" id="status" name="status">
+                <option value="livré" {% if vehicle.availability == 'réservé' %}selected{% endif %}>Livré</option>
+                <option value="retourné" {% if vehicle.availability == 'indisponible' %}selected{% endif %}>Retourné</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="return_date" class="form-label">Date de Retour Prévue</label>
+            <input type="date" class="form-control" id="return_date" name="return_date" value="{{ reservation.start_date|date:'Y-m-d' }}">
+        </div>
+        <div class="mb-3">
+            <label for="reasons" class="form-label">Raisons</label>
+            <textarea class="form-control" id="reasons" name="reasons">{{ reservation.reasons }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="actual_return_date" class="form-label">Date de Retour Effective</label>
+            <input type="date" class="form-control" id="actual_return_date" name="actual_return_date">
+        </div>
+        <button type="submit" class="btn btn-primary">Mettre à Jour</button>
+    </form>
+</div>
+{% endblock %}

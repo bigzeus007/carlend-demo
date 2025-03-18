@@ -1,0 +1,59 @@
+{% extends 'base.html' %} {% block title %}Tableau de bord{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <h1>Bienvenue, {{ user.username }} !</h1>
+  <p>C'est votre tableau de bord.</p>
+
+  <div class="row mt-4">
+    <div class="col-md-3">
+      <div class="card text-white bg-success mb-3">
+        <div class="card-header">Véhicules disponibles</div>
+        <div class="card-body">
+          <h5 class="card-title">{{ available_vehicles_count }}</h5>
+          <p class="card-text">Véhicules prêts à être assignés.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-white bg-danger mb-3">
+        <div class="card-header">Véhicules Indisponibles</div>
+        <div class="card-body">
+          <h5 class="card-title">{{ unavailable_vehicles_count }}</h5>
+          <p class="card-text">Véhicules actuellement non disponibles.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-white bg-warning mb-3">
+        <div class="card-header">Demandes de Réservation</div>
+        <div class="card-body">
+          <h5 class="card-title">{{ pending_reservations_count }}</h5>
+          <p class="card-text">Réservations en attente d'affectation.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-white bg-primary mb-3">
+        <div class="card-header">Réservations Actives</div>
+        <div class="card-body">
+          <h5 class="card-title">{{ active_reservations_count }}</h5>
+          <p class="card-text">Réservations en cours.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <a href="{% url 'add_reservation' %}" class="btn btn-primary"
+      >Créer une Réservation</a
+    >
+    <a href="{% url 'reservation_list' %}" class="btn btn-success"
+      >Voir les Réservations</a
+    >
+    <a href="{% url 'vehicle_list' %}" class="btn btn-warning"
+      >Gérer les Véhicules</a
+    >
+    <a href="{% url 'parc_list' %}" class="btn btn-info">Voir le Parc</a>
+  </div>
+</div>
+{% endblock %}

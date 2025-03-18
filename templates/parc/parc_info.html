@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Info Véhicule{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center">
+    <h1>Informations sur le véhicule</h1>
+    <a href="javascript:history.back()" class="btn btn-secondary">Retour</a>
+  </div>
+  <table class="table table-bordered">
+    <tr>
+      <th>Interlocuteur interne</th>
+      <td>{{ reservation.user }}</td>
+    </tr>
+    <tr>
+      <th>Modèle</th>
+      <td>{{ vehicle.model }}</td>
+    </tr>
+    <tr>
+      <th>Immatriculation</th>
+      <td>{{ vehicle.license_plate }}</td>
+    </tr>
+    <tr>
+      <th>Disponibilité</th>
+      <td>
+        {% if vehicle.availability == 'disponible' %}
+        <span class="badge bg-success">Disponible</span>
+        {% elif vehicle.availability == 'réservé' %}
+        <span class="badge bg-warning">Réservé</span>
+        {% else %}
+        <span class="badge bg-danger">Indisponible</span>
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <th>Nom du Client</th>
+      <td>{{ reservation.client_name }}</td>
+    </tr>
+    {% if vehicle.availability == 'réservé' %}
+    <tr>
+      <th>Date prévue de réservation</th>
+      <td>{{ reservation.reservation_date|date:"d/m/Y" }}</td>
+    </tr>
+    <tr>
+      <th>Durée prévue de la réservation (en jours)</th>
+      <td>{{ reservation.reservation_duration }}</td>
+    </tr>
+    {% elif vehicle.availability == 'indisponible' %}
+    <tr>
+      <th>Date de sortie</th>
+      <td>{{ reservation.start_date|date:"d/m/Y" }}</td>
+    </tr>
+    <tr>
+      <th>Date de retour prévue</th>
+      <td>{{ reservation.end_date|date:"d/m/Y" }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <th>Durée du prêt convenue initialement (en jours)</th>
+      <td>{{ reservation.reservation_duration }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+      <th>Identifiant véhicule client</th>
+      <td>{{ reservation.client_license_plate }}</td>
+    </tr>
+    <tr>
+      <th>Date de MEC véhicule client</th>
+      <td>{{ reservation.client_vehicle_date|date:"d/m/Y" }}</td>
+    </tr>
+    <tr>
+      <th>Raisons</th>
+      <td>{{ reservation.reasons }}</td>
+    </tr>
+    <tr>
+      <th>Conseiller commercial</th>
+      <td>{{ reservation.commercial_advisor }}</td>
+    </tr>
+    <tr>
+      <th>Conseiller service</th>
+      <td>{{ reservation.service_advisor }}</td>
+    </tr>
+    <tr>
+      <th>Permis de Conduire (Recto)</th>
+      <td>
+          {% if reservation.driving_license_front %}
+          <a href="{{ reservation.driving_license_front.url }}" target="_blank">Voir le fichier</a>
+          {% else %}
+          Non fourni
+          {% endif %}
+      </td>
+  </tr>
+  <tr>
+      <th>Carte d'Identité (Recto)</th>
+      <td>
+          {% if reservation.id_card_front %}
+          <a href="{{ reservation.id_card_front.url }}" target="_blank">Voir le fichier</a>
+          {% else %}
+          Non fourni
+          {% endif %}
+      </td>
+  </tr>
+    
+  </table>
+  
+</div>
+{% endblock %}

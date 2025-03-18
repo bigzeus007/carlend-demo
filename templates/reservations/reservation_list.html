@@ -1,0 +1,84 @@
+{% extends 'base.html' %} {% block title %}Liste des Réservations{% endblock %}
+{% block content %}
+<a href="{% url 'add_reservation' %}" class="btn btn-primary mb-3"
+  >Ajouter une Réservation</a
+>
+<table class="table table-bordered table-hover mt-4">
+  <thead class="table-primary">
+    <tr>
+      <th>Date de Création</th>
+      <th>Demandeur</th>
+      <th>Nom Client</th>
+      <th>Criticité</th>
+      <th>Date de Réservation</th>
+      <th>Durée</th>
+      <th>Statut</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for reservation in reservations %}
+    <tr>
+      <td>{{ reservation.created_at }}</td>
+      <td>{{ reservation.user.username }}</td>
+      <td>{{ reservation.client_name }}</td>
+      <td>{{ reservation.get_criticality_display }}</td>
+      <td>{{ reservation.reservation_date }}</td>
+      <td>{{ reservation.reservation_duration }} jours</td>
+      <td>{{ reservation.get_status_validation_display }}</td>
+      <td>
+        <a
+          href="{% url 'reservation_detail' reservation.id %}"
+          class="btn btn-info btn-sm"
+          >ℹ️ Infos</a
+        >
+        {% if reservation.status_validation == 'pending' %}
+        <form
+          method="post"
+          action="{% url 'validate_reservation' reservation.id %}"
+        >
+          {% csrf_token %}
+          <button
+            type="submit"
+            name="action"
+            value="approve"
+            class="btn btn-success btn-sm"
+          >
+            ✅ Valider
+          </button>
+          <button
+            type="submit"
+            name="action"
+            value="reject"
+            class="btn btn-danger btn-sm"
+          >
+            ❌ Rejeter
+          </button>
+        </form>
+        {% elif reservation.status_validation == 'approved' %}
+        <a
+          href="{% url 'assign_vehicle' reservation.id %}"
+          class="btn btn-primary btn-sm"
+          >🚗 Assigner un véhicule</a
+        >
+        {% elif reservation.status_validation == 'rejected' %}
+        <form
+          method="post"
+          action="{% url 'archive_reservation' reservation.id %}"
+        >
+          {% csrf_token %}
+          <button type="submit" class="btn btn-warning btn-sm">
+            📂 Archiver
+          </button>
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="8" class="text-center">Aucune réservation disponible</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

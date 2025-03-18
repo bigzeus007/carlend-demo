@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}Liste des Historiques{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Historique des {% if historique_type == 'pret' %}Prêts{% else %}Annulations{% endif %}</h1>
+    <!-- Formulaire de recherche par date -->
+    <form method="get" class="mb-4">
+        <div class="row">
+            <div class="col-md-4">
+                <label for="search_date" class="form-label">Rechercher par date :</label>
+                <input type="date" id="search_date" name="search_date" class="form-control" value="{{ request.GET.search_date }}">
+            </div>
+            <div class="col-md-2 align-self-end">
+                <button type="submit" class="btn btn-primary">Rechercher</button>
+            </div>
+        </div>
+    </form>
+    <table class="table table-bordered table-hover mt-4">
+        <thead class="table-primary">
+            <tr>
+                {% if historique_type == 'pret' %}
+                    <th>Date de Retour</th>
+                    <th>Client</th>
+                    <th>Conseiller</th>
+                    <th>Modèle</th>
+                    <th>Immatriculation</th>
+                    <th>Date de Sortie</th>
+                    <th>Raisons</th>
+                    <th>Fichiers</th>
+                {% else %}
+                    <th>Date d'Annulation</th>
+                    <th>Client</th>
+                    <th>Conseiller</th>
+                    <th>Date de Réservation</th>
+                    <th>Raisons</th>
+                    <th>Motif d'Annulation</th>
+                    <th>Fichiers</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for reservation in reservations %}
+                <tr>
+                    {% if historique_type == 'pret' %}
+                        <td>{{ reservation.end_date }}</td>
+                        <td>{{ reservation.client_name }}</td>
+                        <td>{{ reservation.user.username }}</td>
+                        <td>{{ reservation.assigned_vehicle.model }}</td>
+                        <td>{{ reservation.assigned_vehicle.license_plate }}</td>
+                        <td>{{ reservation.start_date }}</td>
+                        <td>{{ reservation.reasons }}</td>
+                        <td>
+                            {% if reservation.driving_license_front %}
+                                <a href="{{ reservation.driving_license_front.url }}" target="_blank">Permis Recto</a><br>
+                            {% endif %}
+                            {% if reservation.driving_license_back %}
+                                <a href="{{ reservation.driving_license_back.url }}" target="_blank">Permis Verso</a><br>
+                            {% endif %}
+                            {% if reservation.id_card_front %}
+                                <a href="{{ reservation.id_card_front.url }}" target="_blank">Carte ID Recto</a><br>
+                            {% endif %}
+                            {% if reservation.id_card_back %}
+                                <a href="{{ reservation.id_card_back.url }}" target="_blank">Carte ID Verso</a>
+                            {% endif %}
+                        </td>
+                    {% else %}
+                        <td>{{ reservation.modified_date }}</td>
+                        <td>{{ reservation.client_name }}</td>
+                        <td>{{ reservation.user.username }}</td>
+                        <td>{{ reservation.created_date }}</td>
+                        <td>{{ reservation.reasons }}</td>
+                        <td>{{ reservation.cancellation_reason }}</td>
+                        <td>
+                            {% if reservation.driving_license_front %}
+                                <a href="{{ reservation.driving_license_front.url }}" target="_blank">Permis Recto</a><br>
+                            {% endif %}
+                            {% if reservation.driving_license_back %}
+                                <a href="{{ reservation.driving_license_back.url }}" target="_blank">Permis Verso</a><br>
+                            {% endif %}
+                            {% if reservation.id_card_front %}
+                                <a href="{{ reservation.id_card_front.url }}" target="_blank">Carte ID Recto</a><br>
+                            {% endif %}
+                            {% if reservation.id_card_back %}
+                                <a href="{{ reservation.id_card_back.url }}" target="_blank">Carte ID Verso</a>
+                            {% endif %}
+                        </td>
+                    {% endif %}
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center">Aucun historique trouvé</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

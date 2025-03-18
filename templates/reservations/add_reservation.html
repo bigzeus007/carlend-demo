@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Ajouter une Réservation{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>Ajouter une Réservation</h2>
+                <a href="javascript:history.back()" class="btn btn-secondary">Annuler</a>
+            </div>
+            
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row mb-4">
+                    <h4>Informations Client</h4>
+                    <div class="col-md-6">
+                        <label for="client_name" class="form-label" >Nom Client :</label>
+                        <input type="text" name="client_name" id="client_name" class="form-control" placeholder="Entrez le nom du client" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="client_license_plate" class="form-label">Plaque :</label>
+                        <input type="text" name="client_license_plate" id="client_license_plate" class="form-control" placeholder="Entrez la plaque" required>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <h4>Informations Réservation</h4>
+                    <div class="col-md-6">
+                        <label for="client_vehicle_date" class="form-label" >Mise en circulation :</label>
+                        <input type="date" name="client_vehicle_date" id="client_vehicle_date" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="reservation_date" class="form-label">Date de réservation :</label>
+                        <input type="date" name="reservation_date" id="reservation_date" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="reservation_duration" class="form-label">Durée de la réservation :</label>
+                        <input type="number" name="reservation_duration" id="reservation_duration" class="form-control" placeholder="En jours" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="criticality" class="form-label">Criticité :</label>
+                        <select name="criticality" id="criticality" class="form-select" required>
+                            <option value="" disabled selected>Choisissez une criticité</option>
+                            <option value="low">Faible</option>
+                            <option value="medium">Moyenne</option>
+                            <option value="high">Élevée</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <h4>Autres Détails</h4>
+                    <div class="col-md-6">
+                        <label for="commercial_advisor" class="form-label">Nom Commercial :</label>
+                        <input type="text" name="commercial_advisor" id="commercial_advisor" class="form-control" placeholder="Nom du commercial" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="service_advisor" class="form-label">Nom Conseiller de service :</label>
+                        <input type="text" name="service_advisor" id="service_advisor" class="form-control" placeholder="Nom du conseiller" required>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <label for="reasons" class="form-label">Raisons :</label>
+                        <textarea name="reasons" id="reasons" class="form-control" rows="4" placeholder="Décrivez les raisons de la réservation" required></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success">Enregistrer</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
