@@ -45,16 +45,13 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "default-unsafe-secret-key")
 #DEBUG = True
 #DEBUG = os.getenv("DEBUG", "True") == "True"
 
-if ENVIRONMENT == 'development':
-    DEBUG=True
-else:
-    DEBUG=False
+DEBUG = False
 
 
 # Allowed hosts
 #ALLOWED_HOSTS = []
 #ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'carlend-production.up.railway.app']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 CSRF_TRUSTED_ORIGINS = [
     'https://carlend-production.up.railway.app',
@@ -138,12 +135,9 @@ CLOUDINARY_ALLOWED_FORMATS = ['pdf', 'doc', 'docx', 'jpg', 'png']
 MEDIA_URL = 'https://res.cloudinary.com/{}/'.format(env('CLOUD_NAME'))
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "railway",
-        'CONN_MAX_AGE': 600,
-        'OPTIONS': {'sslmode': 'require'}
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-    
 }
 POSTGRES_LOCALLY = True
 if ENVIRONMENT == 'production' or POSTGRES_LOCALLY is True:
