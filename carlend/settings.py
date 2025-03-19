@@ -39,7 +39,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "default-unsafe-secret-key")
-#DATABASE_URL = "postgresql://postgres:HbsatcAhaSUtHTNBgMdWMaZVoTmBzhpO@junction.proxy.rlwy.net:57638/railway"
+DATABASE_URL = "postgresql://postgres:zzZJabTQbHCigcliNDtshgLhsRLhrZeE@postgres.railway.internal:5432/railway"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
