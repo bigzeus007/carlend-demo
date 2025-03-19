@@ -51,8 +51,7 @@ DEBUG = False
 # Allowed hosts
 #ALLOWED_HOSTS = []
 #ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost',os.getenv("RAILWAY_URL", "web-production-f848.up.railway.app")  # URL de Railway
-]
+ALLOWED_HOSTS = ["web-production-f848.up.railway.app", "127.0.0.1"]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://web-production-f848.up.railway.app", 
