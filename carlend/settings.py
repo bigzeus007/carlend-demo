@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    'whitenoise.runserver_nostatic',
     # Applications personnalisées
     'vehicles',
     'reservations',
@@ -76,7 +77,7 @@ INSTALLED_APPS = [
     'parc',
     'users',
 ]
-
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -121,20 +122,23 @@ os.environ.setdefault("PGHOST", "roundhouse.proxy.rlwy.net")
 os.environ.setdefault("PGPORT", "22478")
 '''
 # Configuration pour Cloudinary
-INSTALLED_APPS += ['cloudinary', 'cloudinary_storage']
+# INSTALLED_APPS += ['cloudinary', 'cloudinary_storage']
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-CLOUDINARY = {
-    'cloud_name': env('CLOUD_NAME'),
-    'api_key': env('API_KEY'),
-    'api_secret': env('API_SECRET'),
-}
-CLOUDINARY_ALLOWED_FORMATS = ['pdf', 'doc', 'docx', 'jpg', 'png']
+# CLOUDINARY = {
+#     'cloud_name': env('CLOUD_NAME'),
+#     'api_key': env('API_KEY'),
+#     'api_secret': env('API_SECRET'),
+# }
+# CLOUDINARY_ALLOWED_FORMATS = ['pdf', 'doc', 'docx', 'jpg', 'png']
 
-MEDIA_URL = 'https://res.cloudinary.com/{}/'.format(env('CLOUD_NAME'))
+# MEDIA_URL = 'https://res.cloudinary.com/{}/'.format(env('CLOUD_NAME'))
+
+
 DATABASES = {
     'default': {
+        'default': dj_database_url.config(default='sqlite:///db.sqlite3')
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
