@@ -55,7 +55,7 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost',os.getenv("RAILWAY_URL", "web-producti
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://carlend-production.up.railway.app',
+    "https://web-production-f848.up.railway.app", 
     'http://127.0.0.1:8000',
 ]
 CONN_MAX_AGE = 60  # Gardez les connexions ouvertes plus longtemps pour réduire les coûts.
