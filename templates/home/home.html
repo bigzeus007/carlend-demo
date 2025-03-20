@@ -47,13 +47,14 @@
     <a href="{% url 'add_reservation' %}" class="btn btn-primary"
       >Créer une Réservation</a
     >
-    <a href="{% url 'reservation_list' %}" class="btn btn-success"
+    <a href="{% url 'reservation_list' %}" class="btn btn-warning"
       >Voir les Réservations</a
     >
-    <a href="{% url 'vehicle_list' %}" class="btn btn-warning"
-      >Gérer les Véhicules</a
+    
+    <a href="{% url 'parc_list' %}" class="btn btn-info">Gérer les Afféctations</a>
+    <a href="{% url 'vehicle_list' %}" class="btn btn-success"
+      >Rajout Véhicule au parc</a
     >
-    <a href="{% url 'parc_list' %}" class="btn btn-info">Voir le Parc</a>
   </div>
 </div>
 {% endblock %}
