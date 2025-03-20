@@ -24,11 +24,15 @@ ROOT_URLCONF = 'carlend.urls'
 # Configuration des bases de données
 if ENVIRONMENT == 'local':
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'zzZJabTQbHCigcliNDtshgLhsRLhrZeE',  # Mets ton mot de passe ici
+        'HOST': 'crossover.proxy.rlwy.net',
+        'PORT': '46041',
     }
+}
 else:
     DATABASES = {
         'default': dj_database_url.config(default=env("DATABASE_URL"), conn_max_age=600, ssl_require=True)
