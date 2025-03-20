@@ -77,14 +77,14 @@
                         {% if reservation.driving_license_front %}
                         <a href="{{ reservation.driving_license_front.url }}" target="_blank">Voir le document existant</a><br>
                         {% endif %}
-                        <input type="file" id="driving_license_front" name="driving_license_front" class="form-control">
+                        <input type="text" id="driving_license_front" name="driving_license_front" class="form-control" value="Non disponible en demo" disabled>
                     </div>
                     <div class="col-md-6">
                         <label for="driving_license_back" class="form-label">Permis de conduire (verso) :</label>
                         {% if reservation.driving_license_back %}
                         <a href="{{ reservation.driving_license_back.url }}" target="_blank">Voir le document existant</a><br>
                         {% endif %}
-                        <input type="file" id="driving_license_back" name="driving_license_back" class="form-control">
+                        <input type="text" id="driving_license_back" name="driving_license_back" class="form-control" value="Non disponible en demo" disabled>
                     </div>
                 </div>
 
@@ -94,14 +94,14 @@
                         {% if reservation.id_card_front %}
                         <a href="{{ reservation.id_card_front.url }}" target="_blank">Voir le document existant</a><br>
                         {% endif %}
-                        <input type="file" id="id_card_front" name="id_card_front" class="form-control">
+                        <input type="text" id="id_card_front" name="id_card_front" class="form-control" value="Non disponible en demo" disabled>
                     </div>
                     <div class="col-md-6">
                         <label for="id_card_back" class="form-label">Carte d'identité (verso) :</label>
                         {% if reservation.id_card_back %}
                         <a href="{{ reservation.id_card_back.url }}" target="_blank">Voir le document existant</a><br>
                         {% endif %}
-                        <input type="file" id="id_card_back" name="id_card_back" class="form-control">
+                        <input type="text" id="id_card_back" name="id_card_back" class="form-control" value="Non disponible en demo" disabled>
                     </div>
                 </div>
 
