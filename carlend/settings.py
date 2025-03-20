@@ -26,11 +26,11 @@ if ENVIRONMENT == 'local':
     DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'zzZJabTQbHCigcliNDtshgLhsRLhrZeE',  # Mets ton mot de passe ici
-        'HOST': 'crossover.proxy.rlwy.net',
-        'PORT': '46041',
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASSWORD'),  # Mets ton mot de passe ici
+        'HOST': env('DATABASE_HOST'),
+        'PORT': env('DATABASE_PORT'),
     }
 }
 else:
